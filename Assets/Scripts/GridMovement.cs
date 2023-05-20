@@ -69,28 +69,11 @@ public class GridMovement : MonoBehaviour
         {
             if (!hitCollider.CompareTag("MovementBlock")) continue;
             var hitPosition = hitCollider.transform.position;
-            var hitX = hitPosition.x;
-            var hitY = hitPosition.z;
-
-            switch (hitX)
-            {
-                case > 0f:
-                    hitX += 0.5f;
-                    break;
-                case < 0f:
-                    hitX -= 0.5f;
-                    break;
-            }
-
-            switch (hitY)
-            {
-                case > 0f:
-                    hitY += 0.5f;
-                    break;
-                case < 0f:
-                    hitY -= 0.5f;
-                    break;
-            }
+            var hitX = hitPosition.x - 0.5f;
+            var hitY = hitPosition.z - 0.5f;
+            
+            
+            Debug.Log($"{hitCollider.transform.position.x} vs {hitX} and {hitCollider.transform.position.z} vs {hitY}");
             
             _vector3Int.Add(new Vector3Int((int)hitX,(int)hitY));
             _possiblePositions.Add(hitPosition);
