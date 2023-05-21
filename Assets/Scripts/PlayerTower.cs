@@ -5,11 +5,21 @@ using UnityEngine;
 
 public class PlayerTower : MonoBehaviour
 {
+    [SerializeField] private int peopleCount;
+    
     private int _floorsCount = 1;
     private GameObject lastBlock;
-    private void OnEnable() => Takeable.giveBlock += AddTowerBlock;
-    
-    private void OnDisable() => Takeable.giveBlock -= AddTowerBlock;
+    private void OnEnable()
+    {
+        TakeableBuilding.giveBlock += AddTowerBlock;
+        TakeableCrowd.addPeople += AddPeople;
+    }
+
+    private void OnDisable()
+    {
+        TakeableBuilding.giveBlock -= AddTowerBlock;
+        TakeableCrowd.addPeople -= AddPeople;
+    }
 
     private void AddTowerBlock(GameObject newBlock)
     {
@@ -22,5 +32,10 @@ public class PlayerTower : MonoBehaviour
         
         _floorsCount++;
         lastBlock = newBlock;
+    }
+
+    private void AddPeople()
+    {
+        peopleCount++;
     }
 }

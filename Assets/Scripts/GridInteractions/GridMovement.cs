@@ -92,7 +92,7 @@ public class GridMovement : MonoBehaviour
 
         _possiblePositions = new List<Vector3>();
 
-        List<Vector3> _impossiblePositions = (from hitCollider in hitColliders let hitPosition = hitCollider.transform.position where !hitCollider.CompareTag("MovementBlock") select new Vector3(hitPosition.x, 0, hitPosition.z)).ToList();
+        List<Vector3> _impossiblePositions = (from hitCollider in hitColliders let hitPosition = hitCollider.transform.position where hitCollider.CompareTag("Building") || hitCollider.CompareTag("Takeable") select new Vector3(hitPosition.x, 0, hitPosition.z)).ToList();
 
         foreach (var hitCollider in hitColliders)
         {
