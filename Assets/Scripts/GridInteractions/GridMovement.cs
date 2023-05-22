@@ -45,6 +45,7 @@ public class GridMovement : MonoBehaviour
         if (!Physics.Raycast(ray, out RaycastHit raycastHit)) return;
         
         var hitPosition = raycastHit.transform.position;
+        Debug.Log(raycastHit.transform.name);
 
         if (!_possiblePositions.Contains(hitPosition)) return;
 
@@ -55,7 +56,7 @@ public class GridMovement : MonoBehaviour
 
     private void LerpMoving()
     {
-        if(transform.position.magnitude - _newPosition.magnitude == 0) return;
+        if(transform.position.x == _newPosition.x && transform.position.z == _newPosition.z) return;
 
         _current = Mathf.MoveTowards(_current, _target, movementSpeed * Time.deltaTime);
 

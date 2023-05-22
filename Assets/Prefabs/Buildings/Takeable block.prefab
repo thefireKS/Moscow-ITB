@@ -99,6 +99,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockToPass: {fileID: 5381629380865370289, guid: 4f39d987dd270f5449f1711031b746ad, type: 3}
+  block:
+    blockType: 1
+    hasHuman: 0
 --- !u!65 &2759045017293135155
 BoxCollider:
   m_ObjectHideFlags: 0

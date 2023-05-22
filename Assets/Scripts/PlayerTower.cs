@@ -5,14 +5,22 @@ using UnityEngine;
 
 public class PlayerTower : MonoBehaviour
 {
+    public int health = 5;
+    [Space(5)]
     [SerializeField] private int peopleCount;
+    [SerializeField] private List<TowerBlock> towerBlocks;
+    
     
     private int _floorsCount = 1;
-    private GameObject lastBlock;
+    private List<GameObject> gameObjectBlocks;
+
+
     private void OnEnable()
     {
         TakeableBuilding.giveBlock += AddTowerBlock;
         TakeableCrowd.addPeople += AddPeople;
+
+        gameObjectBlocks = new List<GameObject>();
     }
 
     private void OnDisable()
@@ -21,7 +29,7 @@ public class PlayerTower : MonoBehaviour
         TakeableCrowd.addPeople -= AddPeople;
     }
 
-    private void AddTowerBlock(GameObject newBlock)
+    private void AddTowerBlock(GameObject newBlock, TowerBlock newTowerBlock)
     {
         var block = Instantiate(newBlock, transform, false);
 
@@ -31,11 +39,36 @@ public class PlayerTower : MonoBehaviour
         block.transform.localPosition = new Vector3(0, block.transform.localPosition.y, 0);
         
         _floorsCount++;
-        lastBlock = newBlock;
+        
+        towerBlocks.Add(newTowerBlock);
+        gameObjectBlocks.Add(newBlock);
     }
 
     private void AddPeople()
     {
         peopleCount++;
+    }
+
+    public void GetDamage(int damageAmount)
+    {
+        health -= damageAmount;
+        _floorsCount--;
+        towerBlocks.RemoveAt(towerBlocks.Count);
+        Destroy(gameObjectBlocks[gameObjectBlocks.Count]);
+        gameObjectBlocks.RemoveAt(gameObjectBlocks.Count);
+    }
+    
+    [Serializable]
+    public class TowerBlock
+    {
+        public enum BlockType
+        {
+            Laser,
+            Shield,
+            Rocket
+        }
+
+        public BlockType blockType;
+        public bool hasHuman;
     }
 }
