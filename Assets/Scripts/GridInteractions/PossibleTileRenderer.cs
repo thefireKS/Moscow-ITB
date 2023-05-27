@@ -8,17 +8,53 @@ public class PossibleTileRenderer : MonoBehaviour
 {
     [SerializeField] private Tilemap uiTilemap;
     [SerializeField] private Tile possibleMovementTile;
+    [SerializeField] private Tile possibleAttackTile;
 
-    private void OnEnable() => GridMovement.setMovementTile += PaintTile;
+    private void OnEnable()
+    {
+        PlayerMovement.setMovementTile += PaintTile;
+        PlayerAttack.setAttackTile += PaintTile;
+        
+        TurnSystem.OnChangingTurn += UpdateTilesOnTurnEnd;
+    }
 
-    private void OnDisable() => GridMovement.setMovementTile -= PaintTile;
+    private void OnDisable()
+    {
+        PlayerMovement.setMovementTile -= PaintTile;
+        PlayerAttack.setAttackTile -= PaintTile;
+        
+        TurnSystem.OnChangingTurn -= UpdateTilesOnTurnEnd;
+    }
 
     private void PaintTile(List<Vector3Int> position)
     {
         uiTilemap.ClearAllTiles();
-        foreach (var tile in position)
+
+        switch (TurnSystem.instance.currentTurn)
         {
-            uiTilemap.SetTile(tile,possibleMovementTile);   
+            case TurnSystem.Turn.PlayerMove:
+            {
+                foreach (var tile in position)
+                {
+                    uiTilemap.SetTile(tile, possibleMovementTile);
+                }
+
+                break;
+            }
+            case TurnSystem.Turn.PlayerAttack:
+            {
+                foreach (var tile in position)
+                {
+                    uiTilemap.SetTile(tile, possibleAttackTile);
+                }
+
+                break;
+            }
         }
+    }
+
+    private void UpdateTilesOnTurnEnd()
+    {
+        uiTilemap.ClearAllTiles();
     }
 }

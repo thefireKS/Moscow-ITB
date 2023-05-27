@@ -2,94 +2,79 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-
-public class GridMovement : MonoBehaviour
+public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField] private float movementRadius;
-    [SerializeField] private float movementSpeed;
-    [Space(5)] 
-    [SerializeField] private AnimationCurve curve;
-
-    private float _current;
-    private const float _target = 1, _lerpTolerance = 0.95f;
-
-    private Camera _camera;
-
-    private List<Vector3> _possiblePositions;
+    [SerializeField] private GameObject laser;
+    [SerializeField] private Transform attackPoint;
+    [Space(5)]
+    [SerializeField] private float laserAttackRadius;
     
-    private Vector3 _currentPosition;
-    private Vector3 _newPosition;
+    private Camera _camera;
+    private GameObject _currentBullet;
+    private bool _bulletExists;
+    
+    private List<Vector3> _possiblePositions;
 
-    public static Action<List<Vector3Int>> setMovementTile;
-        
+    public static Action<List<Vector3Int>> setAttackTile;
+
     private void Start()
     {
         _camera = Camera.main;
-        SetPosition();
-    }
-    
-    private void Update()
-    {
-        if(Input.GetMouseButtonDown(0))
-            ClickToMove();
-        
-        LerpMoving();
     }
 
-    private void ClickToMove()
+    private void OnEnable() => TurnSystem.OnChangingTurn += GetPossibleTiles;
+    
+    private void OnDisable() => TurnSystem.OnChangingTurn -= GetPossibleTiles;
+
+    private void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+            ClickToAttack();
+
+        BulletChecking();
+    }
+
+    private void ClickToAttack()
+    {
+        if(TurnSystem.instance.currentTurn != TurnSystem.Turn.PlayerAttack) return;
+
         Ray ray = _camera.ScreenPointToRay (Input.mousePosition);
         
         if (!Physics.Raycast(ray, out RaycastHit raycastHit)) return;
         
         var hitPosition = raycastHit.transform.position;
-        Debug.Log(raycastHit.transform.name);
 
         if (!_possiblePositions.Contains(hitPosition)) return;
+        
+        var _newPosition = new Vector3(hitPosition.x, transform.position.y, hitPosition.z);
+        transform.LookAt(_newPosition);
 
-        _currentPosition = transform.position;
-        _newPosition = new Vector3(hitPosition.x, _currentPosition.y, hitPosition.z);
-        _current = 0;
+        _currentBullet = Instantiate(laser);
+        _currentBullet.transform.position = attackPoint.position;
+        _currentBullet.transform.rotation = attackPoint.rotation;
+
+        _bulletExists = true;
     }
 
-    private void LerpMoving()
+    private void BulletChecking()
     {
-        if(transform.position.x == _newPosition.x && transform.position.z == _newPosition.z) return;
+        if(TurnSystem.instance.currentTurn != TurnSystem.Turn.PlayerAttack) return;
 
-        _current = Mathf.MoveTowards(_current, _target, movementSpeed * Time.deltaTime);
-
-        transform.position = Vector3.Lerp(_currentPosition, _newPosition, curve.Evaluate(_current));
-        
-        if(_current < _lerpTolerance) return;
-        
-        _current = 1;
-        GetPossibleTiles();
-    }
-
-    private void SetPosition()
-    {
-        Ray ray = new Ray(transform.position, transform.up * -1);
-        
-        if (!Physics.Raycast(ray, out RaycastHit raycastHit)) return;
-
-        var hitPosition = raycastHit.transform.position;
-        var newPosition = new Vector3(hitPosition.x, transform.position.y,
-            hitPosition.z);
-
-        transform.position = newPosition;
-        _currentPosition = transform.position;
-        _newPosition = _currentPosition;
-        
-        GetPossibleTiles();
+        if (_currentBullet == null && _bulletExists)
+        {
+            TurnSystem.instance.NextTurn();
+            _bulletExists = false;
+        }
     }
 
     private void GetPossibleTiles()
     {
+        if(TurnSystem.instance.currentTurn != TurnSystem.Turn.PlayerAttack) return;
+        
         Vector3 spherePosition = new Vector3(transform.position.x, 0, transform.position.z);
         
-        Collider[] hitColliders = Physics.OverlapSphere(spherePosition, movementRadius);
+        Collider[] hitColliders = Physics.OverlapSphere(spherePosition, laserAttackRadius);
 
         _possiblePositions = new List<Vector3>();
 
@@ -118,16 +103,16 @@ public class GridMovement : MonoBehaviour
         }
 
         List <Vector3Int> _vector3Int = (from pos in _possiblePositions let hitX = (int) (pos.x - 0.5f) let hitY = (int) (pos.z - 0.5f) select new Vector3Int(hitX, hitY)).ToList();
-        
-        setMovementTile?.Invoke(_vector3Int);
-    }
 
+        setAttackTile?.Invoke(_vector3Int);
+    }
+    
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.white;
         
         Vector3 spherePosition = new Vector3(transform.position.x, 0, transform.position.z);
         
-        Gizmos.DrawWireSphere(spherePosition, movementRadius);
+        Gizmos.DrawWireSphere(spherePosition, laserAttackRadius);
     }
 }
