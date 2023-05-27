@@ -57,18 +57,4 @@ public class PlayerTower : MonoBehaviour
         Destroy(gameObjectBlocks[gameObjectBlocks.Count]);
         gameObjectBlocks.RemoveAt(gameObjectBlocks.Count);
     }
-    
-    [Serializable]
-    public class TowerBlock
-    {
-        public enum BlockType
-        {
-            Laser,
-            Shield,
-            Rocket
-        }
-
-        public BlockType blockType;
-        public bool hasHuman;
-    }
 }

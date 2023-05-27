@@ -8,6 +8,8 @@ TagManager:
   - MovementBlock
   - Takeable
   - People
+  - Enemy
+  - Laser
   layers:
   - Default
   - TransparentFX
