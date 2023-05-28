@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public class TextTypeWriter : MonoBehaviour
@@ -34,7 +34,7 @@ public class TextTypeWriter : MonoBehaviour
     {
         _currentTime += Time.deltaTime;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             UpdateText();
             CheckToStopDialogue();
@@ -55,7 +55,6 @@ public class TextTypeWriter : MonoBehaviour
     private void UpdateText()
     {
         if(CheckForActiveObjects()) return;
-        
 
         if (fullText[_currentTextForDisplay] != _currentText)
         {
@@ -73,7 +72,7 @@ public class TextTypeWriter : MonoBehaviour
 
     private void CheckToStopDialogue()
     {
-        if(numbersOfTextToStopDialogue[_currentTextForDisplayBlocker] + 1 != _currentTextForDisplay) return;
+        if(numbersOfTextToStopDialogue[_currentTextForDisplayBlocker] != _currentTextForDisplay) return;
         
         raycastBlocker.SetActive(false);
         

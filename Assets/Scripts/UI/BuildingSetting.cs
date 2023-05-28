@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class BuildingSetting : MonoBehaviour
 {
     [SerializeField] private GameObject mainInterfaceWindow;
+    [SerializeField] private GameObject mainInterfaceCallButton;
     [SerializeField] private GameObject interfaceParent;
     [Space(5)]
     [SerializeField] private GameObject interfaceBlock;
@@ -32,5 +33,6 @@ public class BuildingSetting : MonoBehaviour
     private void ActivateAddingPeopleMenu()
     {
         mainInterfaceWindow.SetActive(true);
+        mainInterfaceCallButton.SetActive(false);
     }
 }

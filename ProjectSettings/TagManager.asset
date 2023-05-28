@@ -9,7 +9,7 @@ TagManager:
   - Takeable
   - People
   - Enemy
-  - Laser
+  - Bullet
   layers:
   - Default
   - TransparentFX
