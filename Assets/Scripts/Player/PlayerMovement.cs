@@ -92,7 +92,6 @@ public class PlayerMovement : MonoBehaviour
     private void GetPossibleTiles()
     {
         if(TurnSystem.instance.currentTurn != TurnSystem.Turn.PlayerMove) return;
-        Debug.Log("DRAW");
 
         Vector3 spherePosition = new Vector3(transform.position.x, 0, transform.position.z);
         

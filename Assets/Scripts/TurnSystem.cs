@@ -13,6 +13,8 @@ public class TurnSystem : MonoBehaviour
     private const int turnsNumber = 3; // 4 in total, but count goes from 0, that's why
 
     public static Action OnChangingTurn;
+
+    public static Action<GameReplaySystem.result> setTieResult;
     
     public enum Turn
     {
@@ -32,13 +34,17 @@ public class TurnSystem : MonoBehaviour
     public void NextTurn()
     {
         currentTurn++;
-        
-        Debug.Log(currentTurn);
 
         if (currentTurn > (Turn) turnsNumber)
         {
             currentTurn = 0;
             currentTurnNumber++;
+        }
+
+        if (currentTurnNumber > totalTurns)
+        {
+            setTieResult(GameReplaySystem.result.Tie);
+            return;
         }
 
         OnChangingTurn?.Invoke();

@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] private GameObject laser;
+    [SerializeField] private GameObject rocket;
     [SerializeField] private Transform attackPoint;
     [Space(5)]
     [SerializeField] private float laserAttackRadius;
@@ -16,11 +17,14 @@ public class PlayerAttack : MonoBehaviour
     
     private List<Vector3> _possiblePositions;
 
+    private PlayerTower _playerTower;
+
     public static Action<List<Vector3Int>> setAttackTile;
 
     private void Start()
     {
         _camera = Camera.main;
+        _playerTower = GetComponent<PlayerTower>();
     }
 
     private void OnEnable() => TurnSystem.OnChangingTurn += GetPossibleTiles;
@@ -50,7 +54,32 @@ public class PlayerAttack : MonoBehaviour
         var _newPosition = new Vector3(hitPosition.x, transform.position.y, hitPosition.z);
         transform.LookAt(_newPosition);
 
-        _currentBullet = Instantiate(laser);
+        if (_playerTower.towerBlocks.Count == 0)
+        {
+            _bulletExists = true;
+            _currentBullet = null;
+            
+            BulletChecking();
+            return;
+        }
+        
+        if (_playerTower.towerBlocks[0] == null || _playerTower.towerBlocks[0].hasHuman == false)
+        {
+            _bulletExists = true;
+            _currentBullet = null;
+            
+            BulletChecking();
+            return;
+        }
+
+        _currentBullet = _playerTower.towerBlocks[0].blockType switch
+        {
+            TowerBlock.BlockType.Laser => Instantiate(laser),
+            TowerBlock.BlockType.Rocket => Instantiate(rocket),
+            _ => _currentBullet
+        };
+        
+        
         _currentBullet.transform.position = attackPoint.position;
         _currentBullet.transform.rotation = attackPoint.rotation;
 
@@ -62,7 +91,7 @@ public class PlayerAttack : MonoBehaviour
         if(TurnSystem.instance.currentTurn != TurnSystem.Turn.PlayerAttack) return;
 
         if (_currentBullet != null || !_bulletExists) return;
-        
+
         TurnSystem.instance.NextTurn();
         _bulletExists = false;
     }

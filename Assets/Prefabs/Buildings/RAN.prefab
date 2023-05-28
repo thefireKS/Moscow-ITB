@@ -61,9 +61,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4362962105363994262, guid: ca2b6dae4bbff4c44be018aa9437409c, type: 3}
-  - {fileID: 7211448773848044386, guid: ca2b6dae4bbff4c44be018aa9437409c, type: 3}
-  - {fileID: 7922251121040759823, guid: ca2b6dae4bbff4c44be018aa9437409c, type: 3}
+  - {fileID: 2100000, guid: 42b1017b66714f040b819b7ab8cf10cb, type: 2}
+  - {fileID: 2100000, guid: d8246f749fe98954eb92038319e0615e, type: 2}
+  - {fileID: 2100000, guid: 85f2a6b8924390f4eb93621616608bdb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -136,10 +136,16 @@ MonoBehaviour:
   blockToPass: {fileID: 5381629380865370289, guid: 4f39d987dd270f5449f1711031b746ad, type: 3}
   block:
     name: RAN
-    blockType: 0
+    blockType: 2
     hasHuman: 0
     icon: {fileID: 21300000, guid: fd3955ccd2c1a0343895679330e14326, type: 3}
-    description: "\u0417\u0434\u0430\u043D\u0438\u0435 \u0440\u0430\u043D!!!!"
+    description: "\u0420\u0410\u041D \u043E\u0441\u043D\u0430\u0449\u0435\u043D\u0430
+      \u0431\u0430\u0442\u0430\u0440\u0435\u0435\u0439 \u0441\u0438\u0441\u0442\u0435\u043C\u043E\u0439
+      \u0437\u0430\u043B\u043F\u043E\u0432\u043E\u0433\u043E \u043E\u0433\u043D\u044F
+      \u0437\u0435\u043C\u043B\u044F-\u0437\u0435\u043C\u043B\u044F. \u041B\u0435\u0442\u044F\u0442
+      \u0441\u0442\u0440\u043E\u0433\u043E \u043A \u0446\u0435\u043B\u0438, \u043A\u0430\u043A
+      \u0436\u0430\u0436\u0434\u0430 \u0438\u0441\u0441\u043B\u0435\u0434\u043E\u0432\u0430\u0442\u0435\u043B\u0435\u0439
+      \u043D\u0435\u0438\u0437\u0432\u0435\u0434\u0430\u043D\u043D\u043E\u0433\u043E."
 --- !u!114 &1247430619
 MonoBehaviour:
   m_ObjectHideFlags: 0
