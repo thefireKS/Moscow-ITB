@@ -14,7 +14,8 @@ public class TakeableBuilding : MonoBehaviour
 
     private Transform _player;
 
-    public static Action<GameObject, TowerBlock> giveBlock;
+    public static Action <GameObject, TowerBlock> giveBlock;
+    public static Action <TowerBlock> giveBlockToInterface;
 
     private void Start()
     {
@@ -25,21 +26,19 @@ public class TakeableBuilding : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            _player = other.transform;
-            _possibleToTake = true;
-            _outline.enabled = true;
-        }
+        if (!other.CompareTag("Player")) return;
+        
+        _player = other.transform;
+        _possibleToTake = true;
+        _outline.enabled = true;
     }
     
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            _possibleToTake = false;
-            _outline.enabled = false;
-        }
+        if (!other.CompareTag("Player")) return;
+        
+        _possibleToTake = false;
+        _outline.enabled = false;
     }
 
     private void OnMouseDown()
@@ -52,6 +51,7 @@ public class TakeableBuilding : MonoBehaviour
     private void OnDestroy()
     {
         giveBlock?.Invoke(blockToPass,block);
+        giveBlockToInterface?.Invoke(block);
         TurnSystem.instance.NextTurn();
     }
 }

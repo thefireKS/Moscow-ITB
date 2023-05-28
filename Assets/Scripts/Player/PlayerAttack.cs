@@ -37,7 +37,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void ClickToAttack()
     {
-        if(TurnSystem.instance.currentTurn != TurnSystem.Turn.PlayerAttack) return;
+        if(TurnSystem.instance.currentTurn != TurnSystem.Turn.PlayerAttack || _currentBullet == true) return;
 
         Ray ray = _camera.ScreenPointToRay (Input.mousePosition);
         
@@ -61,11 +61,10 @@ public class PlayerAttack : MonoBehaviour
     {
         if(TurnSystem.instance.currentTurn != TurnSystem.Turn.PlayerAttack) return;
 
-        if (_currentBullet == null && _bulletExists)
-        {
-            TurnSystem.instance.NextTurn();
-            _bulletExists = false;
-        }
+        if (_currentBullet != null || !_bulletExists) return;
+        
+        TurnSystem.instance.NextTurn();
+        _bulletExists = false;
     }
 
     private void GetPossibleTiles()

@@ -8,7 +8,8 @@ public class TurnSystem : MonoBehaviour
     public static TurnSystem instance;
     public Turn currentTurn;
     public int currentTurnNumber = 0;
-    
+    public int totalTurns;
+
     private const int turnsNumber = 3; // 4 in total, but count goes from 0, that's why
 
     public static Action OnChangingTurn;
@@ -31,12 +32,15 @@ public class TurnSystem : MonoBehaviour
     public void NextTurn()
     {
         currentTurn++;
+        
+        Debug.Log(currentTurn);
+
+        if (currentTurn > (Turn) turnsNumber)
+        {
+            currentTurn = 0;
+            currentTurnNumber++;
+        }
 
         OnChangingTurn?.Invoke();
-        
-        if (currentTurn <= (Turn) turnsNumber) return;
-        
-        currentTurn = 0;
-        currentTurnNumber++;
     }
 }
