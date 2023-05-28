@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private AnimationCurve curve;
 
     private float _current;
-    private const float _target = 1, _lerpTolerance = 0.95f;
+    private const float _target = 1, _lerpTolerance = 1f;
 
     private Camera _camera;
 
@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void ClickToMove()
     {
-        if(TurnSystem.instance.currentTurn != TurnSystem.Turn.PlayerMove) return;
+        if(TurnSystem.instance.currentTurn != TurnSystem.Turn.PlayerMove || _current is > 0 and < 1) return;
 
         Ray ray = _camera.ScreenPointToRay (Input.mousePosition);
         
@@ -92,7 +92,8 @@ public class PlayerMovement : MonoBehaviour
     private void GetPossibleTiles()
     {
         if(TurnSystem.instance.currentTurn != TurnSystem.Turn.PlayerMove) return;
-        
+        Debug.Log("DRAW");
+
         Vector3 spherePosition = new Vector3(transform.position.x, 0, transform.position.z);
         
         Collider[] hitColliders = Physics.OverlapSphere(spherePosition, movementRadius);

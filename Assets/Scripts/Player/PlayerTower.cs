@@ -20,6 +20,8 @@ public class PlayerTower : MonoBehaviour
         TakeableBuilding.giveBlock += AddTowerBlock;
         TakeableCrowd.addPeople += AddPeople;
 
+        HumanToBlock.addHumanToTowerBlock += InsertPeopleToBlock;
+
         gameObjectBlocks = new List<GameObject>();
     }
 
@@ -27,6 +29,8 @@ public class PlayerTower : MonoBehaviour
     {
         TakeableBuilding.giveBlock -= AddTowerBlock;
         TakeableCrowd.addPeople -= AddPeople;
+        
+        HumanToBlock.addHumanToTowerBlock -= InsertPeopleToBlock;
     }
 
     private void AddTowerBlock(GameObject newBlock, TowerBlock newTowerBlock)
@@ -47,6 +51,11 @@ public class PlayerTower : MonoBehaviour
     private void AddPeople()
     {
         peopleCount++;
+    }
+
+    private void InsertPeopleToBlock(TowerBlock block)
+    {
+        towerBlocks.Find(towerBlock => towerBlock.name == block.name).hasHuman = true;
     }
 
     public void GetDamage(int damageAmount)
